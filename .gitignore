@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.csv
+*.monitor.lock
+graph_*.png
+graph2_monitor.log*
+*.bak260925*
+ibd_test_*.txt
+debug.log*
+.cookie
+bitcoin.conf
+sugarchain.conf
+.env
+codex-session-*.txt
+codex-latest-*.txt

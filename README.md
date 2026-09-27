@@ -1,0 +1,50 @@
+# IBD Monitor
+
+Monitor header and block synchronization using existing node RPC responses and `debug.log`.
+Supports Sugarchain/Visioneye checkpoint progress and Bitcoin Core 31 / Sugarchain Komorebi Core31 header sync and presync logs.
+
+## Requirements
+
+- Linux (CLI auto-discovery uses `/proc`; collector locking uses `fcntl`).
+- Python 3.10+, NumPy and Matplotlib.
+- `feh` and a graphical desktop for the live image viewer.
+- A running node and its matching command-line client, with local RPC access.
+
+On Ubuntu 22.04:
+
+```bash
+sudo apt install python3-numpy python3-matplotlib feh
+```
+
+Keep `graph.sh`, `ibd_connection.py` and `ibd_progress.py` together. Despite its filename, `graph.sh` is a Python program. `ibd_test.sh` is not required.
+
+## Run
+
+Use an existing node datadir and create a separate output directory:
+
+```bash
+mkdir -p "$HOME/ibd-monitor-output/node-a"
+IBD_DATADIR="$HOME/.sugarchain" \
+IBD_OUTPUT_DIR="$HOME/ibd-monitor-output/node-a" \
+./graph.sh --reload 3
+```
+
+For Bitcoin, set `IBD_DATADIR="$HOME/.bitcoin"`. To watch two nodes, run the command in separate terminals with different datadirs and output directories.
+
+The matching running node's sibling CLI is discovered automatically. If needed, explicitly set `IBD_CLI=/path/to/sugarchain-cli` or `IBD_CLI=/path/to/bitcoin-cli`. The CLI reads its normal config and RPC cookie. `IBD_CONF` and `IBD_RPC_PORT` are available for overrides.
+
+The existing collector samples RPC every five seconds. `--reload 3` refreshes the graph every three seconds; it does not change the sampling interval. Initially the graph waits for sufficient samples. Core31 presync uses timestamped log entries; observations begin with the collected session rather than reconstructing an entire prior IBD.
+
+Files:
+
+- `ibd_rpc.csv` and its monitor lock: in the datadir by default; override with `IBD_CSV`.
+- Graph images and `graph2_monitor.log`: in `IBD_OUTPUT_DIR`, which must exist. The default output directory is the script directory.
+- `debug.log`: resolved from the selected datadir/network; override with `IBD_DEBUG_LOG`.
+
+The script does not start, stop or restart the node. It does start a separate collector. Closing the reload viewer/loop does not necessarily stop that collector.
+
+## Metrics
+
+Graphs include header/block heights and speeds, outbound peer count, elapsed time and ETA estimates. Block speed uses the existing 60-second rolling window. Block Min/Max/Avg use positive, complete measurement windows after observed block processing begins; startup partial windows are excluded. Header statistics have their existing log/RPC handling and are not defined identically to block statistics.
+
+Generated CSV files, images, logs, node configuration and authentication files are not part of this repository. The source retains a legacy local-test fallback using port `11324` and literal placeholder credentials `rpcuser` / `rpcpassword`; normal node config/cookie discovery takes precedence.
