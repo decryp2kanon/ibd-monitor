@@ -127,6 +127,11 @@ def close_viewer(process):
             process.wait()
 
 
+def current_block_rate(rates, heights):
+    """Return no measurement until block processing has actually started."""
+    return rates[-1] if any(height > 0 for height in heights) else float("nan")
+
+
 def reload_loop(interval):
     render_command = [sys.executable, str(Path(__file__).resolve()), "--render-reload"]
     final_render_command = [
@@ -572,6 +577,7 @@ def main():
 
     block_window_starts = []
     block_rate_60s = rolling_rate_60s(heights, window_starts=block_window_starts)
+    block_rate_now = current_block_rate(block_rate_60s, heights)
     header_rate_60s = rolling_rate_60s(header_speed_heights, header_speed_sessions)
     for i, row in enumerate(checkpoint_rows):
         phase = row.get("checkpoint_phase")
@@ -870,7 +876,7 @@ def main():
         block_rate_60s,
         color="red",
         linewidth=2,
-        label="Block Speed: " + format_rate(block_rate_60s[-1])
+        label="Block Speed: " + format_rate(block_rate_now)
     )
 
     ax2.set_ylabel(
@@ -1177,7 +1183,7 @@ def main():
     print("Header Height:", header_plot_heights[-1])
     print("Header Speed:", header_rate_60s[-1], "/s")
     print("Block Height:", heights[-1])
-    print("Block Speed:", block_rate_60s[-1], "/s")
+    print("Block Speed:", format_rate(block_rate_now))
     print("Outbound Peers:", peer_values[-1])
 
 
