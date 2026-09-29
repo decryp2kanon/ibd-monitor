@@ -43,6 +43,36 @@ Files:
 
 The script does not start, stop or restart the node. It does start a separate collector. Closing the reload viewer/loop does not necessarily stop that collector.
 
+## Terminal monitor
+
+For text output without a graph or CSV collector, keep `ibd_test.sh`,
+`ibd_terminal_progress.py`, `ibd_progress.py` and `ibd_connection.py` together.
+Install `jq` in addition to Bash and Python 3.10+:
+
+```bash
+sudo apt install jq
+IBD_DATADIR="$HOME/.sugarchain" ./ibd_test.sh
+```
+
+The terminal uses the same CLI discovery/configuration overrides described above.
+It reads the selected `debug.log` incrementally and displays Core31 presync and
+replay heights/rates even while RPC `headers` is zero. Visioneye progress remains
+supported. Rates use the existing log timestamp window; the first sample and
+each phase/session transition need two distinct timestamps before a rate exists.
+Block speed and peer count retain the five-second terminal sampling behavior.
+
+Output is also written to the next unused `ibd_test_N.txt` in the script
+directory; set `IBD_LOGDIR` to an existing directory to change this location.
+Ctrl+C stops the terminal and its own log reader. The terminal does not execute
+`graph.sh`, start/restart a graph collector, or modify graph CSVs. Its Core31
+presync adapter is separate from the shared graph parser.
+
+Run the offline terminal regression tests with:
+
+```bash
+python3 -m unittest -v test_ibd_terminal
+```
+
 ## Metrics
 
 Graphs include header/block heights and speeds, outbound peer count, elapsed time and ETA estimates. Block speed uses the existing 60-second rolling window. Block Min/Max/Avg use positive, complete measurement windows after observed block processing begins; startup partial windows are excluded. Header statistics have their existing log/RPC handling and are not defined identically to block statistics.
