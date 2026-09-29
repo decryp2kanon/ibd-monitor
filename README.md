@@ -65,6 +65,28 @@ supported. Rates use the existing log timestamp window; the first sample and
 each phase/session transition need two distinct timestamps before a rate exists.
 Block speed and peer count retain the five-second terminal sampling behavior.
 
+Example `ibd_test.sh` output during header presync, before block download starts:
+
+```text
+Header Height=1196000 / Header Speed=1566.67/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1204000 / Header Speed=1566.67/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1212000 / Header Speed=1533.33/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1218000 / Header Speed=1533.33/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1226000 / Header Speed=1500/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1234000 / Header Speed=1500/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1240000 / Header Speed=1475.41/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1248000 / Header Speed=1500/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1256000 / Header Speed=1500/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1264000 / Header Speed=1466.67/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1272000 / Header Speed=1466.67/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1280000 / Header Speed=1466.67/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1288000 / Header Speed=1466.67/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1296000 / Header Speed=1466.67/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1304000 / Header Speed=1500/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1312000 / Header Speed=1500/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+Header Height=1318000 / Header Speed=1500/s / Block Height=0 / Block Speed=0/s / Outbound Peers=9
+```
+
 Output is also written to the next unused `ibd_test_N.txt` in the script
 directory; set `IBD_LOGDIR` to an existing directory to change this location.
 Ctrl+C stops the terminal and its own log reader. The terminal does not execute
