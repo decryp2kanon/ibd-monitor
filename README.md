@@ -3,6 +3,10 @@
 Monitor header and block synchronization using existing node RPC responses and `debug.log`.
 Supports Sugarchain/Visioneye checkpoint progress and Bitcoin Core 31 / Sugarchain Komorebi Core31 header sync and presync logs.
 
+![Example Sugarchain IBD graph showing header and block heights, synchronization speeds, outbound peers, elapsed time and ETA](docs/images/ibd-progress-example.png)
+
+See how synchronization progresses at a glance: header and block heights, processing speeds, connected outbound peers, elapsed time and estimated time remaining. The image above shows an example Sugarchain run.
+
 ## Requirements
 
 - Linux (CLI auto-discovery uses `/proc`; collector locking uses `fcntl`).
