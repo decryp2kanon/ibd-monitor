@@ -7,6 +7,23 @@ Supports Sugarchain/Visioneye checkpoint progress and Bitcoin Core 31 / Sugarcha
 
 See how synchronization progresses at a glance: header and block heights, processing speeds, connected outbound peers, elapsed time and estimated time remaining. The image above shows an example Sugarchain run.
 
+## Compatibility
+
+**Target compatibility: Bitcoin Core 0.16.3–31.x and Sugarchain derivatives.**
+This describes the intended RPC compatibility range, not a claim that every
+release in that range has been individually tested.
+
+| Node family | Monitoring support |
+| --- | --- |
+| Legacy [Sugarchain 0.16.3.x](https://github.com/sugarchain-project/sugarchain/releases) / Visioneye | RPC header/block progress; Visioneye checkpoint presync and replay logs when available |
+| Bitcoin Core 31.x / Sugarchain Komorebi Core31 | RPC progress plus Core31 presync and replay log formats |
+
+Regression tests cover the Visioneye and Core31 parsing paths. Other releases
+within the range have not been individually verified. Basic monitoring requires
+`getblockchaininfo`, `getpeerinfo` and `getnettotals` with their expected fields,
+plus the matching node CLI and RPC access. Early header progress requires a
+recognized `debug.log` format; otherwise monitoring falls back to RPC values.
+
 ## Requirements
 
 - Linux (CLI auto-discovery uses `/proc`; collector locking uses `fcntl`).
